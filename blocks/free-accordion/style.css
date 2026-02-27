@@ -1,0 +1,15 @@
+/**
+ * Styles front-end — bloc parent free-accordion/accordion
+ * Le bloc parent ne rend rien de visible côté front.
+ * Ce fichier est réservé aux éventuels boutons tout voir / tout cacher.
+ */
+
+.free-accordion-controls {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.free-accordion-controls button {
+	cursor: pointer;
+}

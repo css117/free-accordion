@@ -1,0 +1,41 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "free-accordion/accordion-item",
+	"version": "0.1.0",
+	"title": "Accordéon (item)",
+	"category": "widgets",
+	"icon": "archive",
+	"description": "Un item d'accordéon : un toggler et un contenu à révéler. Se relie à un groupe parent via son nom.",
+	"textdomain": "free-accordion",
+	"attributes": {
+		"parentGroup": {
+			"type": "string",
+			"default": "",
+			"description": "Nom du groupe accordéon parent auquel cet item est rattaché."
+		},
+		"openByDefault": {
+			"type": "boolean",
+			"default": false,
+			"description": "Si true, cet item est ouvert au chargement de la page."
+		}
+	},
+	"supports": {
+		"html": false,
+		"anchor": true
+	},
+	"innerBlocks": [
+		{
+			"name": "core/group",
+			"description": "Zone toggler — ce qu'on clique pour ouvrir/fermer."
+		},
+		{
+			"name": "core/group",
+			"description": "Zone contenu — ce qui se révèle."
+		}
+	],
+	"editorScript": "file:../../build/blocks/free-accordion-item/index.js",
+	"editorStyle": "file:./editor.css",
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,50 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "free-accordion/accordion",
+	"version": "0.1.0",
+	"title": "Accordéon (groupe)",
+	"category": "widgets",
+	"icon": "list-view",
+	"description": "Définit un groupe d'accordéon. Les items fils se relient à ce bloc via son nom de groupe.",
+	"textdomain": "free-accordion",
+	"attributes": {
+		"groupId": {
+			"type": "string",
+			"default": "",
+			"description": "Copie du clientId Gutenberg, persistée pour être disponible en PHP."
+		},
+		"label": {
+			"type": "string",
+			"default": "",
+			"description": "Étiquette lisible pour identifier ce groupe dans l'éditeur."
+		},
+		"labelShowAll": {
+			"type": "string",
+			"default": ""
+		},
+		"labelHideAll": {
+			"type": "string",
+			"default": ""
+		},
+		"exclusive": {
+			"type": "boolean",
+			"default": false,
+			"description": "Si true, ouvrir un item ferme les items frères du même groupe."
+		},
+		"animated": {
+			"type": "boolean",
+			"default": true,
+			"description": "Si true, l'ouverture/fermeture est animée en CSS (max-height)."
+		}
+	},
+	"supports": {
+		"html": false,
+		"anchor": true
+	},
+	"editorScript": "file:../../build/blocks/free-accordion/index.js",
+	"viewScript": "file:../../build/blocks/free-accordion/frontend.js",
+	"editorStyle": "file:./editor.css",
+	"style": "file:./style.css",
+	"render": "file:./render.php"
+}

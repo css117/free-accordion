@@ -1,0 +1,33 @@
+/**
+ * Styles éditeur uniquement — bloc fils free-accordion/accordion-item
+ */
+
+.free-accordion-item-editor {
+	border: 2px solid var(--wp-components-color-accent, #a0a0a0);
+	border-radius: 2px;
+	overflow: hidden;
+}
+
+/* Badge groupe en haut du bloc */
+.free-accordion-item-group-badge {
+	padding: 4px 10px;
+	background: #f0f0f0;
+	font-size: 11px;
+	color: #646970;
+	border-bottom: 1px solid #ddd;
+}
+
+.free-accordion-item-group-badge strong {
+	color: #1e1e1e;
+}
+
+.free-accordion-item-group-badge em {
+	color: #a0a0a0;
+	font-style: normal;
+}
+
+/* Les deux zones toggler / contenu sont visuellement distinctes dans l'éditeur
+   grâce aux étiquettes que Gutenberg affiche via metadata.name sur les core/group */
+.free-accordion-item-editor .wp-block-group:first-of-type {
+	border-bottom: 2px dashed #ddd;
+}

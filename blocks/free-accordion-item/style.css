@@ -1,0 +1,26 @@
+/**
+ * Styles front-end — bloc fils free-accordion/accordion-item
+ * Minimum vital : mécanique de révélation uniquement.
+ * Pas de cosmétique — le thème fait ça.
+ */
+
+/* Le contenu est masqué par défaut */
+.fa-item__content {
+	overflow: hidden;
+	max-height: 0;
+}
+
+/* Animation CSS pure — effet tiroir */
+.fa-item--animated .fa-item__content {
+	transition: max-height 0.35s ease-out;
+}
+
+/* État ouvert */
+.fa-item--open .fa-item__content {
+	max-height: 4096px; /* valeur haute arbitraire — cf. technique max-height */
+}
+
+/* Le toggler est cliquable */
+.fa-item__toggler {
+	cursor: pointer;
+}

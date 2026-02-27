@@ -1,0 +1,37 @@
+/**
+ * Styles éditeur uniquement — bloc parent free-accordion/accordion
+ * Juste assez pour le repérer visuellement dans l'éditeur.
+ */
+
+.free-accordion-group-placeholder {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 8px 12px;
+	border: 2px dashed var(--wp-components-color-accent, #a0a0a0);
+	border-radius: 2px;
+	background: #f0f0f0;
+	font-size: 13px;
+	color: #3c434a;
+	user-select: none;
+}
+
+.free-accordion-group-badge strong {
+	color: #1e1e1e;
+}
+
+.free-accordion-group-buttons-preview {
+	color: #646970;
+	font-size: 12px;
+}
+
+.free-accordion-group-id {
+	font-size: 11px;
+	color: #646970;
+	margin-top: 4px;
+}
+
+.free-accordion-group-id code {
+	font-size: 10px;
+	word-break: break-all;
+}
