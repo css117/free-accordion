@@ -15,7 +15,17 @@ import metadata from './block.json';
 function useAccordionGroups() {
 	return useSelect( ( select ) => {
 		const store = select( 'core/block-editor' );
-		const parentBlocks = store.getBlocks().filter(
+		function flattenBlocks( blocks ) {
+			return blocks.reduce( ( acc, block ) => {
+				acc.push( block );
+				if ( block.innerBlocks && block.innerBlocks.length ) {
+					acc.push( ...flattenBlocks( block.innerBlocks ) );
+				}
+				return acc;
+			}, [] );
+		}
+
+		const parentBlocks = flattenBlocks( store.getBlocks() ).filter(
 			b => b.name === 'free-accordion/accordion'
 		);
 

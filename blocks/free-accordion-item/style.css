@@ -18,14 +18,14 @@
 }
 
 /* État ouvert : animation puis max-height: none — aucune contrainte sur le contenu */
-.fa-item--animated.fa-item--open .fa-item__content {
+.fa-item--animated.fa-item--open > .fa-item__content {
 	animation: fa-open 0.5s ease-out;
 	animation-fill-mode: backwards;
 	max-height: none;
 }
 
 /* Sans animation : affichage instantané */
-.fa-item--open .fa-item__content {
+.fa-item--open > .fa-item__content {
 	max-height: none;
 }
 
@@ -35,7 +35,7 @@
 	100% { max-height: 0; }
 }
 
-.fa-item--animated.fa-item--closing .fa-item__content {
+.fa-item--animated.fa-item--closing > .fa-item__content {
 	animation: fa-close 0.35s ease-in;
 	animation-fill-mode: forwards;
 }
