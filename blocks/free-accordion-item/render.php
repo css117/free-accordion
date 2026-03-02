@@ -19,7 +19,7 @@ if ( $parent_group ) {
 			! empty( $b['attrs']['groupId'] ) &&
 			$b['attrs']['groupId'] === $parent_group
 		) {
-			$animated  = ! empty( $b['attrs']['animated'] );
+			$animated = isset( $b['attrs']['animated'] ) ? (bool) $b['attrs']['animated'] : true;
 			$exclusive = ! empty( $b['attrs']['exclusive'] );
 			break;
 		}
@@ -31,20 +31,6 @@ $classes = [ 'fa-item' ];
 if ( $open_default ) $classes[] = 'fa-item--open';
 if ( $animated )     $classes[] = 'fa-item--animated';
 
-// Rendu des deux zones InnerBlocks
-$toggler_html = '';
-$content_html = '';
-$i = 0;
-foreach ( $block->inner_blocks as $inner ) {
-	$rendered = ( new WP_Block( $inner->parsed_block ) )->render();
-	if ( 0 === $i ) {
-		$toggler_html = $rendered;
-	} else {
-		$content_html = $rendered;
-	}
-	$i++;
-}
-
 ?>
 <div
 	class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
@@ -55,10 +41,5 @@ foreach ( $block->inner_blocks as $inner ) {
 		data-fa-animated="<?php echo $animated ? 'true' : 'false'; ?>"
 	<?php endif; ?>
 >
-	<div class="fa-item__toggler" role="button" tabindex="0" aria-expanded="<?php echo $open_default ? 'true' : 'false'; ?>">
-		<?php echo $toggler_html; ?>
-	</div>
-	<div class="fa-item__content"<?php if ( ! $open_default ) echo ' aria-hidden="true"'; ?>>
-		<?php echo $content_html; ?>
-	</div>
+	<?php echo $content; ?>
 </div>

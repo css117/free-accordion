@@ -2,74 +2,40 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls, InnerBlocks } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
+import { registerBlockType } from '@wordpress/blocks';
+import metadata from './block.json';
 
 /**
  * Bloc fils : free-accordion/accordion-item
  *
- * Un seul InnerBlocks avec deux core/group verrouillés en structure :
- *  - premier  core/group → zone toggler  (ce qu'on clique)
- *  - second   core/group → zone contenu  (ce qui se révèle)
- *
- * L'utilisateur peut mettre ce qu'il veut dans chaque groupe,
- * mais ne peut pas supprimer ou réorganiser les deux groupes eux-mêmes.
+ * Un seul InnerBlocks libre — l'utilisateur y met ce qu'il veut.
+ * Le lien avec le groupe parent se fait via parentGroup (clientId du bloc parent).
  */
 
 function useAccordionGroups() {
 	return useSelect( ( select ) => {
-		const { getBlocksByType } = select( 'core/block-editor' );
-		const parentBlocks = getBlocksByType( 'free-accordion/accordion' );
+		const store = select( 'core/block-editor' );
+		const parentBlocks = store.getBlocks().filter(
+			b => b.name === 'free-accordion/accordion'
+		);
 
 		const options = [
-			{
-				label: __( '— Aucun groupe —', 'free-accordion' ),
-				value: '',
-			},
+			{ label: __( '— Aucun groupe —', 'free-accordion' ), value: '' },
 		];
-
+		
 		parentBlocks.forEach( ( block ) => {
 			const label = block.attributes.label
 				? block.attributes.label
-				: block.clientId;
-
-			options.push( {
-				label,
-				value: block.clientId,
-			} );
+				: block.attributes.groupId;
+			options.push( { label, value: block.attributes.groupId } );
 		} );
 
 		return options;
 	}, [] );
 }
 
-/**
- * Template verrouillé : deux core/group, structure fixe, contenu libre.
- * Le premier = toggler, le second = contenu révélé.
- */
-const ITEM_TEMPLATE = [
-	[
-		'core/group',
-		{
-			className: 'fa-item__toggler',
-			metadata: { name: __( 'Toggler', 'free-accordion' ) },
-		},
-		[
-			[ 'core/paragraph', { placeholder: __( 'Texte du toggler, ou remplacez ce bloc par une image, un titre…', 'free-accordion' ) } ],
-		],
-	],
-	[
-		'core/group',
-		{
-			className: 'fa-item__content',
-			metadata: { name: __( 'Contenu révélé', 'free-accordion' ) },
-		},
-		[
-			[ 'core/paragraph', { placeholder: __( 'Contenu qui sera révélé au clic…', 'free-accordion' ) } ],
-		],
-	],
-];
-
-export default function Edit( { attributes, setAttributes } ) {
-	const { parentGroup, openByDefault } = attributes;
+function Edit( { attributes, setAttributes } ) {
+	const { parentGroup, parentLabel, openByDefault } = attributes;
 	const groupOptions = useAccordionGroups();
 
 	const blockProps = useBlockProps( {
@@ -91,7 +57,13 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 						value={ parentGroup }
 						options={ groupOptions }
-						onChange={ ( val ) => setAttributes( { parentGroup: val } ) }
+						onChange={ ( val ) => {
+							const selected = groupOptions.find( o => o.value === val );
+							setAttributes( {
+								parentGroup: val,
+								parentLabel: selected ? selected.label : '',
+							} );
+						} }
 					/>
 				</PanelBody>
 
@@ -113,28 +85,35 @@ export default function Edit( { attributes, setAttributes } ) {
 
 			<div { ...blockProps }>
 
-				{ /* Indicateur de groupe dans l'éditeur */ }
+				{ /* Badge groupe */ }
 				<div className="free-accordion-item-group-badge">
 					{ parentGroup
 						? <>
 							{ __( '↑ Groupe : ', 'free-accordion' ) }
-							<strong>
-								{ groupOptions.find( o => o.value === parentGroup )?.label || parentGroup }
-							</strong>
+							<strong>{ parentLabel || __( '(sans étiquette)', 'free-accordion' ) }</strong>
 						</>
 						: <em>{ __( '↑ Aucun groupe rattaché', 'free-accordion' ) }</em>
 					}
 				</div>
 
-				{ /*
-				  * templateLock="all" : l'utilisateur ne peut pas
-				  * supprimer, déplacer ou ajouter de blocs au niveau
-				  * des deux core/group racines.
-				  * À l'intérieur de chaque group, tout est libre.
-				  */ }
 				<InnerBlocks
-					template={ ITEM_TEMPLATE }
-					templateLock="all"
+					template={ [
+						[ 'core/group', { 
+							className: 'fa-item__toggler',
+							layout: { type: 'default' },							
+							metadata: { name: __( 'Toggler', 'free-accordion' )},
+						}, [
+							[ 'core/paragraph', {} ],
+						] ],
+						[ 'core/group', { 
+							className: 'fa-item__content',
+							layout: { type: 'default' },							
+							metadata: { name: __( 'Contenu révélé', 'free-accordion' ) },
+						}, [
+							[ 'core/paragraph', {} ],
+						] ],
+					] }					
+					templateLock={ false }
 					__experimentalCaptureToolbars={ true }
 				/>
 
@@ -142,3 +121,8 @@ export default function Edit( { attributes, setAttributes } ) {
 		</>
 	);
 }
+
+registerBlockType( metadata, {
+	edit: Edit,
+	save: () => <InnerBlocks.Content />,
+} );

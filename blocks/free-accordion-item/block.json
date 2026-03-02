@@ -14,6 +14,11 @@
 			"default": "",
 			"description": "Nom du groupe accordéon parent auquel cet item est rattaché."
 		},
+		"parentLabel": {
+			"type": "string",
+			"default": "",
+			"description": "Étiquette du groupe parent, sauvegardée pour l'affichage dans l'éditeur."
+		},
 		"openByDefault": {
 			"type": "boolean",
 			"default": false,
@@ -24,18 +29,8 @@
 		"html": false,
 		"anchor": true
 	},
-	"innerBlocks": [
-		{
-			"name": "core/group",
-			"description": "Zone toggler — ce qu'on clique pour ouvrir/fermer."
-		},
-		{
-			"name": "core/group",
-			"description": "Zone contenu — ce qui se révèle."
-		}
-	],
 	"editorScript": "file:../../build/blocks/free-accordion-item/index.js",
 	"editorStyle": "file:./editor.css",
-	"style": "file:./style.css",
+	"viewStyle": "file:../../build/blocks/free-accordion-item/style.css",
 	"render": "file:./render.php"
 }

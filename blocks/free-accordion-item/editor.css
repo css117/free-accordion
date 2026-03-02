@@ -3,10 +3,14 @@
  */
 
 .free-accordion-item-editor {
-	border: 2px solid var(--wp-components-color-accent, #a0a0a0);
 	border-radius: 2px;
 	overflow: hidden;
+    padding: 8px 12px;
+	border: 2px dashed var(--wp-components-color-accent, #a0a0a0);
+	border-radius: 2px;
+	background: #f0f0f0;
 }
+
 
 /* Badge groupe en haut du bloc */
 .free-accordion-item-group-badge {
@@ -25,9 +29,26 @@
 	color: #a0a0a0;
 	font-style: normal;
 }
-
-/* Les deux zones toggler / contenu sont visuellement distinctes dans l'éditeur
-   grâce aux étiquettes que Gutenberg affiche via metadata.name sur les core/group */
-.free-accordion-item-editor .wp-block-group:first-of-type {
-	border-bottom: 2px dashed #ddd;
+.fa-item__content {
+    margin-top:30px;
+}
+.fa-item__toggler,
+.fa-item__content {
+    padding: 10px;
+    border-radius:5px;
+    background: white;
+    position: relative;
+}
+.fa-item__toggler::before,
+.fa-item__content::before {
+    content: "▶ Toggler";
+    display: block;
+    color: #646970;
+    pointer-events: none;
+    transform:translateY(-100%);
+    margin-top: -15px;
+    font-size:12px;
+}
+.fa-item__content::before {
+    content: "▼ Contenu révélé";    
 }

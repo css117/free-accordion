@@ -10,14 +10,34 @@
 	max-height: 0;
 }
 
-/* Animation CSS pure — effet tiroir */
-.fa-item--animated .fa-item__content {
-	transition: max-height 0.35s ease-out;
+/* --- Animation ouverture --- */
+@keyframes fa-open {
+	0%   { max-height: 0; }
+	60%  { max-height: 300px; } /* assez pour que l'animation soit perceptible */
+	100% { max-height: 100vh; } /* on dépasse la visibilité, l'état final prend le relais */
 }
 
-/* État ouvert */
+/* État ouvert : animation puis max-height: none — aucune contrainte sur le contenu */
+.fa-item--animated.fa-item--open .fa-item__content {
+	animation: fa-open 0.5s ease-out;
+	animation-fill-mode: backwards;
+	max-height: none;
+}
+
+/* Sans animation : affichage instantané */
 .fa-item--open .fa-item__content {
-	max-height: 4096px; /* valeur haute arbitraire — cf. technique max-height */
+	max-height: none;
+}
+
+/* --- Animation fermeture --- */
+@keyframes fa-close {
+	0%   { max-height: 100vh; } /* on part du viewport, le saut au-delà est invisible */
+	100% { max-height: 0; }
+}
+
+.fa-item--animated.fa-item--closing .fa-item__content {
+	animation: fa-close 0.35s ease-in;
+	animation-fill-mode: forwards;
 }
 
 /* Le toggler est cliquable */

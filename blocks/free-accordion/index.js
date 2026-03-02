@@ -2,6 +2,8 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
+import { registerBlockType } from '@wordpress/blocks';
+import metadata from './block.json';
 
 /**
  * Bloc parent : free-accordion/accordion
@@ -12,13 +14,14 @@ import { useEffect } from '@wordpress/element';
 export default function Edit( { attributes, setAttributes, clientId } ) {
 	const { label, labelShowAll, labelHideAll, exclusive, animated } = attributes;
 
-	// Copie du clientId dans groupId à la création ou si manquant.
-	// Transparent pour l'utilisateur, disponible ensuite en PHP via $attributes['groupId'].
 	useEffect( () => {
-		if ( ! attributes.groupId || attributes.groupId !== clientId ) {
-			setAttributes( { groupId: clientId } );
-		}
-	}, [ clientId ] );
+    if ( ! attributes.groupId ) {
+        // Génère un ID stable une seule fois à la création
+        const uid = 'fa-' + Math.random().toString(36).slice(2,9);
+        setAttributes( { groupId: uid } );
+    }
+    // Pas de dépendance à clientId — on ne régénère jamais
+	}, [] );
 
 	const blockProps = useBlockProps( {
 		className: 'free-accordion-group-placeholder',
@@ -90,8 +93,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			{ /* Zone de repère dans l'éditeur */ }
 			<div { ...blockProps }>
 				<span className="free-accordion-group-badge">
-					{ __( '⚙ Accordéon — groupe : ', 'free-accordion' ) }
-					<strong>{ label || clientId }</strong>
+					{ __( '⚙ Accordéon — groupe : ', 'free-accordion' ) }					
+					<strong>{ label || attributes.groupId }</strong>
 				</span>
 				{ ( labelShowAll || labelHideAll ) && (
 					<span className="free-accordion-group-buttons-preview">
@@ -104,3 +107,5 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		</>
 	);
 }
+
+registerBlockType( metadata, { edit: Edit, save: () => null } );

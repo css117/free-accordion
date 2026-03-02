@@ -13,3 +13,7 @@
 .free-accordion-controls button {
 	cursor: pointer;
 }
+
+.fa-btn--hidden {
+    display: none;
+}

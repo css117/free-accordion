@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Free Accordion
- * Plugin URI:        https://github.com/your-repo/free-accordion
+ * Plugin URI:        https://github.com/css117/free-accordion
  * Description:       Blocs Gutenberg d'accordéon légers et librement placés dans la page.
  * Version:           0.1.0
  * Author:            Claude & Giboo.fr
@@ -33,10 +33,10 @@ function _fa_flatten_blocks( array $blocks ): array {
 }
 
 /**
- * Enregistrement des blocs au chargement de WordPress.
+ * Enregistrement des scripts et des blocs.
  */
 function free_accordion_register_blocks() {
-	register_block_type( __DIR__ . '/blocks/free-accordion' );
-	register_block_type( __DIR__ . '/blocks/free-accordion-item' );
+    register_block_type( __DIR__ . '/blocks/free-accordion' );
+    register_block_type( __DIR__ . '/blocks/free-accordion-item' );
 }
 add_action( 'init', 'free_accordion_register_blocks' );
