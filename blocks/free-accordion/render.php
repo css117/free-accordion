@@ -17,11 +17,13 @@ if ( ! $group_id || ( ! $label_show && ! $label_hide ) ) {
 }
 
 ?>
-<div class="fa-group-controls" data-fa-controls="<?php echo $group_id; ?>"
+<div class="fa-group-controls<?php echo ! empty( $attributes['className'] ) ? ' ' . esc_attr( $attributes['className'] ) : ''; ?>" 
+    data-fa-controls="<?php echo $group_id; ?>"
     <?php if ( ! empty( $attributes['globalControl'] ) ) : ?>
         data-fa-global="true"
     <?php endif; ?>
 >
+
 	<?php if ( $label_show ) : ?>
 		<button type="button" class="fa-btn-show-all">
 			<?php echo $label_show; ?>

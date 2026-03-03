@@ -27,9 +27,14 @@ if ( $parent_group ) {
 }
 
 // CSS classes.
-$classes = [ 'fa-item' ];
-if ( $open_default ) $classes[] = 'fa-item--open';
-if ( $animated )     $classes[] = 'fa-item--animated';
+$extra_classes = ! empty( $attributes['className'] ) ? $attributes['className'] : '';
+
+$classes = array_filter( [ 
+    'fa-item',
+    $open_default ? 'fa-item--open' : '',
+    $animated ? 'fa-item--animated' : '',
+    $extra_classes,
+] );
 
 ?>
 <div
