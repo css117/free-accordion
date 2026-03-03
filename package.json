@@ -7,9 +7,11 @@
 	"scripts": {
 		"build": "wp-scripts build",
 		"start": "wp-scripts start",
-		"lint:js": "wp-scripts lint-js"
+		"lint:js": "wp-scripts lint-js",
+		"i18n": "wp-scripts i18n make-pot . languages/free-accordion.pot --include=blocks"
 	},
 	"devDependencies": {
+		"@wordpress/babel-plugin-makepot": "^6.40.0",
 		"@wordpress/scripts": "^27.0.0"
 	}
 }

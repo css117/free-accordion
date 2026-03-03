@@ -2,9 +2,9 @@
 /**
  * Plugin Name:       Free Accordion
  * Plugin URI:        https://github.com/css117/free-accordion
- * Description:       Blocs Gutenberg d'accordéon légers et librement placés dans la page.
+ * Description:       Lightweight, freely positioned Gutenberg accordion blocks.
  * Version:           0.1.0
- * Author:            Claude & Giboo.fr
+ * Author:            Claude.ai & Giboo.fr
  * License:           GPL-2.0-or-later
  * Text Domain:       free-accordion
  * Domain Path:       /languages
@@ -15,10 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Aplatit récursivement un tableau de blocs parsés.
- * Utilisé dans render.php du bloc fils pour retrouver les attributs du groupe parent.
+ * Recursively flattens an array of parsed blocks.
+ * Used in render.php of the child block to retrieve the attributes of the parent group.
  *
- * @param  array $blocks  Tableau retourné par parse_blocks().
+ * @param  array $blocks  Retruned table by parse_blocks().
  * @return array
  */
 function _fa_flatten_blocks( array $blocks ): array {
@@ -33,10 +33,17 @@ function _fa_flatten_blocks( array $blocks ): array {
 }
 
 /**
- * Enregistrement des scripts et des blocs.
+ * Register scripts and blocks.
  */
 function free_accordion_register_blocks() {
     register_block_type( __DIR__ . '/blocks/free-accordion' );
     register_block_type( __DIR__ . '/blocks/free-accordion-item' );
 }
 add_action( 'init', 'free_accordion_register_blocks' );
+
+/**
+ * Load language file
+ */
+add_action( 'init', function() {
+    load_plugin_textdomain( 'free-accordion', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+} );

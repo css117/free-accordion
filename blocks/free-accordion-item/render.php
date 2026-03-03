@@ -1,12 +1,12 @@
 <?php
 /**
- * Rendu front-end — bloc fils free-accordion/accordion-item
+ * Front-end rendering — child block free-accordion/accordion-item
  */
 
 $parent_group = ! empty( $attributes['parentGroup'] )  ? esc_attr( $attributes['parentGroup'] ) : '';
 $open_default = ! empty( $attributes['openByDefault'] );
 
-// Récupère les options du groupe parent.
+// Retrieves the options from the parent group.
 $animated  = false;
 $exclusive = false;
 
@@ -26,7 +26,7 @@ if ( $parent_group ) {
 	}
 }
 
-// Classes CSS
+// CSS classes.
 $classes = [ 'fa-item' ];
 if ( $open_default ) $classes[] = 'fa-item--open';
 if ( $animated )     $classes[] = 'fa-item--animated';

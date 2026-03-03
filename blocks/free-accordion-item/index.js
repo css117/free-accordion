@@ -6,34 +6,31 @@ import { registerBlockType } from '@wordpress/blocks';
 import metadata from './block.json';
 
 /**
- * Bloc fils : free-accordion/accordion-item
- *
- * Un seul InnerBlocks libre — l'utilisateur y met ce qu'il veut.
- * Le lien avec le groupe parent se fait via parentGroup (clientId du bloc parent).
+ * Child block: free-accordion/accordion-item
  */
+
+function flattenBlocks( blocks ) {
+	return blocks.reduce( ( acc, block ) => {
+		acc.push( block );
+		if ( block.innerBlocks && block.innerBlocks.length ) {
+			acc.push( ...flattenBlocks( block.innerBlocks ) );
+		}
+		return acc;
+	}, [] );
+}
 
 function useAccordionGroups() {
 	return useSelect( ( select ) => {
 		const store = select( 'core/block-editor' );
-		function flattenBlocks( blocks ) {
-			return blocks.reduce( ( acc, block ) => {
-				acc.push( block );
-				if ( block.innerBlocks && block.innerBlocks.length ) {
-					acc.push( ...flattenBlocks( block.innerBlocks ) );
-				}
-				return acc;
-			}, [] );
-		}
-
-		const parentBlocks = flattenBlocks( store.getBlocks() ).filter(
-			b => b.name === 'free-accordion/accordion'
-		);
+		const clientIds = store.getBlocksByName( 'free-accordion/accordion' );
 
 		const options = [
-			{ label: __( '— Aucun groupe —', 'free-accordion' ), value: '' },
+			{ label: __( '— No group —', 'free-accordion' ), value: '' },
 		];
-		
-		parentBlocks.forEach( ( block ) => {
+
+		clientIds.forEach( ( clientId ) => {
+			const block = store.getBlock( clientId );
+			if ( ! block || ! block.attributes.groupId ) return;
 			const label = block.attributes.label
 				? block.attributes.label
 				: block.attributes.groupId;
@@ -56,14 +53,14 @@ function Edit( { attributes, setAttributes } ) {
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Groupe parent', 'free-accordion' ) }
+					title={ __( 'Parent group', 'free-accordion' ) }
 					initialOpen={ true }
 				>
 					<SelectControl
-						label={ __( 'Rattacher à l\'accordéon', 'free-accordion' ) }
+						label={ __( 'Attach to accordion', 'free-accordion' ) }
 						help={ groupOptions.length <= 1
-							? __( 'Aucun bloc "Accordéon (groupe)" trouvé sur cette page.', 'free-accordion' )
-							: __( 'Choisissez le groupe qui contrôle cet item.', 'free-accordion' )
+							? __( 'No "Free Accordion group" block found on this page.', 'free-accordion' )
+							: __( 'Choose the group that controls this item.', 'free-accordion' )
 						}
 						value={ parentGroup }
 						options={ groupOptions }
@@ -78,14 +75,14 @@ function Edit( { attributes, setAttributes } ) {
 				</PanelBody>
 
 				<PanelBody
-					title={ __( 'Comportement', 'free-accordion' ) }
+					title={ __( 'Behavior', 'free-accordion' ) }
 					initialOpen={ false }
 				>
 					<ToggleControl
-						label={ __( 'Ouvert par défaut', 'free-accordion' ) }
+						label={ __( 'Open by default', 'free-accordion' ) }
 						help={ openByDefault
-							? __( 'Cet item est visible au chargement de la page.', 'free-accordion' )
-							: __( 'Cet item est masqué au chargement de la page.', 'free-accordion' )
+							? __( 'This item is visible on page load.', 'free-accordion' )
+							: __( 'This item is hidden on page load.', 'free-accordion' )
 						}
 						checked={ openByDefault }
 						onChange={ ( val ) => setAttributes( { openByDefault: val } ) }
@@ -95,34 +92,33 @@ function Edit( { attributes, setAttributes } ) {
 
 			<div { ...blockProps }>
 
-				{ /* Badge groupe */ }
 				<div className="free-accordion-item-group-badge">
 					{ parentGroup
 						? <>
-							{ __( '↑ Groupe : ', 'free-accordion' ) }
-							<strong>{ parentLabel || __( '(sans étiquette)', 'free-accordion' ) }</strong>
+							{ __( '↑ Group: ', 'free-accordion' ) }
+							<strong>{ parentLabel || __( '(no label)', 'free-accordion' ) }</strong>
 						</>
-						: <em>{ __( '↑ Aucun groupe rattaché', 'free-accordion' ) }</em>
+						: <em>{ __( '↑ No group attached', 'free-accordion' ) }</em>
 					}
 				</div>
 
 				<InnerBlocks
 					template={ [
-						[ 'core/group', { 
+						[ 'core/group', {
 							className: 'fa-item__toggler',
-							layout: { type: 'default' },							
-							metadata: { name: __( 'Toggler', 'free-accordion' )},
+							layout: { type: 'default' },
+							metadata: { name: __( 'Toggler', 'free-accordion' ) },
 						}, [
 							[ 'core/paragraph', {} ],
 						] ],
-						[ 'core/group', { 
+						[ 'core/group', {
 							className: 'fa-item__content',
-							layout: { type: 'default' },							
-							metadata: { name: __( 'Contenu révélé', 'free-accordion' ) },
+							layout: { type: 'default' },
+							metadata: { name: __( 'Revealed content', 'free-accordion' ) },
 						}, [
 							[ 'core/paragraph', {} ],
 						] ],
-					] }					
+					] }
 					templateLock={ false }
 					__experimentalCaptureToolbars={ true }
 				/>

@@ -105,16 +105,18 @@
 	// Tout voir / tout cacher
 	// -----------------------------------------------------------------------
 
-	function showAll( groupId ) {
-		document
-			.querySelectorAll( '[data-fa-item][data-fa-parent="' + groupId + '"]' )
-			.forEach( openItem );
+	function showAll( groupId, isGlobal ) {
+		const selector = isGlobal
+			? '[data-fa-item]'
+			: '[data-fa-item][data-fa-parent="' + groupId + '"]';
+		document.querySelectorAll( selector ).forEach( openItem );
 	}
 
-	function hideAll( groupId ) {
-		document
-			.querySelectorAll( '[data-fa-item][data-fa-parent="' + groupId + '"]' )
-			.forEach( closeItem );
+	function hideAll( groupId, isGlobal ) {
+		const selector = isGlobal
+			? '[data-fa-item]'
+			: '[data-fa-item][data-fa-parent="' + groupId + '"]';
+		document.querySelectorAll( selector ).forEach( closeItem );
 	}
 
 	// -----------------------------------------------------------------------
@@ -143,7 +145,7 @@
 		const btnShow = e.target.closest( '.fa-btn-show-all' );
 		if ( btnShow ) {
 			const controls = btnShow.closest( '[data-fa-controls]' );
-			if ( controls ) showAll( controls.dataset.faControls );
+			if ( controls ) showAll( controls.dataset.faControls, controls.dataset.faGlobal === 'true' );
 			return;
 		}
 
@@ -151,7 +153,7 @@
 		const btnHide = e.target.closest( '.fa-btn-hide-all' );
 		if ( btnHide ) {
 			const controls = btnHide.closest( '[data-fa-controls]' );
-			if ( controls ) hideAll( controls.dataset.faControls );
+			if ( controls ) hideAll( controls.dataset.faControls, controls.dataset.faGlobal === 'true' );
 			return;
 		}
 	} );

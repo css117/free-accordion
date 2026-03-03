@@ -3,26 +3,26 @@
 	"apiVersion": 3,
 	"name": "free-accordion/accordion-item",
 	"version": "0.1.0",
-	"title": "Accordéon (item)",
+	"title": "Free Accordion item",
 	"category": "widgets",
 	"icon": "archive",
-	"description": "Un item d'accordéon : un toggler et un contenu à révéler. Se relie à un groupe parent via son nom.",
+	"description": "An accordion item with a toggler and revealed content. Links to a parent group",
 	"textdomain": "free-accordion",
 	"attributes": {
 		"parentGroup": {
 			"type": "string",
 			"default": "",
-			"description": "Nom du groupe accordéon parent auquel cet item est rattaché."
+			"description": "Name of the parent accordion group to which this item is attached"
 		},
 		"parentLabel": {
 			"type": "string",
 			"default": "",
-			"description": "Étiquette du groupe parent, sauvegardée pour l'affichage dans l'éditeur."
+			"description": "Parent group label, saved for display in the editor"
 		},
 		"openByDefault": {
 			"type": "boolean",
 			"default": false,
-			"description": "Si true, cet item est ouvert au chargement de la page."
+			"description": "If true, this item is open when the page loads"
 		}
 	},
 	"supports": {

@@ -2,22 +2,22 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "free-accordion/accordion",
-	"version": "0.1.0",
-	"title": "Accordéon (groupe)",
+	"version": "0.1.0",	
 	"category": "widgets",
-	"icon": "list-view",
-	"description": "Définit un groupe d'accordéon. Les items fils se relient à ce bloc via son nom de groupe.",
+	"icon": "list-view",	
+	"title": "Free Accordion group",
+	"description": "Defines an accordion group. Child items link to this block via their parent group setting",	
 	"textdomain": "free-accordion",
 	"attributes": {
 		"groupId": {
 			"type": "string",
 			"default": "",
-			"description": "Copie du clientId Gutenberg, persistée pour être disponible en PHP."
+			"description": "Copy of the Gutenberg clientId, persisted to be available in PHP"
 		},
 		"label": {
 			"type": "string",
 			"default": "",
-			"description": "Étiquette lisible pour identifier ce groupe dans l'éditeur."
+			"description": "Readable label to identify this group in the editor"
 		},
 		"labelShowAll": {
 			"type": "string",
@@ -30,12 +30,17 @@
 		"exclusive": {
 			"type": "boolean",
 			"default": false,
-			"description": "Si true, ouvrir un item ferme les items frères du même groupe."
+			"description": "If true, opening an item closes the sibling items in the same group"
 		},
 		"animated": {
 			"type": "boolean",
 			"default": true,
-			"description": "Si true, l'ouverture/fermeture est animée en CSS (max-height)."
+			"description": "If true, opening/closing is animated in CSS (max-height)"
+		},
+		"globalControl": {
+			"type": "boolean",
+			"default": false,
+			"description": "If true, the buttons in this group control all accordions on the page"
 		}
 	},
 	"supports": {

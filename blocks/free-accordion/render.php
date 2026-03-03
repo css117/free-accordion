@@ -1,23 +1,27 @@
 <?php
 /**
- * Rendu front-end — bloc parent free-accordion/accordion
+ * Front-end rendering — parent block free-accordion/accordion
  *
- * Ce bloc n'a plus de rendu DOM propre : ses options sont portées
- * directement par chaque bloc fils.
- * Il génère uniquement les boutons tout voir / tout cacher si définis.
+ * This block no longer has its own DOM rendering: its options are carried
+ * directly by each child block.
+ * It only generates the show all / hide all buttons if defined.
  */
 
 $group_id   = ! empty( $attributes['groupId'] )      ? esc_attr( $attributes['groupId'] )     : '';
 $label_show = ! empty( $attributes['labelShowAll'] )  ? esc_html( $attributes['labelShowAll'] ) : '';
 $label_hide = ! empty( $attributes['labelHideAll'] )  ? esc_html( $attributes['labelHideAll'] ) : '';
 
-// Rien à rendre si pas de boutons.
+// Nothing to return if there are no buttons.
 if ( ! $group_id || ( ! $label_show && ! $label_hide ) ) {
 	return;
 }
 
 ?>
-<div class="fa-group-controls" data-fa-controls="<?php echo $group_id; ?>">
+<div class="fa-group-controls" data-fa-controls="<?php echo $group_id; ?>"
+    <?php if ( ! empty( $attributes['globalControl'] ) ) : ?>
+        data-fa-global="true"
+    <?php endif; ?>
+>
 	<?php if ( $label_show ) : ?>
 		<button type="button" class="fa-btn-show-all">
 			<?php echo $label_show; ?>

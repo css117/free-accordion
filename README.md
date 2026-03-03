@@ -1,20 +1,66 @@
-# free-accordion — Note de workflow
+# Free Accordion
 
-## Repo GitHub
-https://github.com/css117/free-accordion
+![Version](https://img.shields.io/badge/version-0.1.0-blue) ![Licence](https://img.shields.io/badge/licence-GPL--2.0--or--later-green) ![WordPress](https://img.shields.io/badge/WordPress-6.x-informational)
 
----
-
-## Prérequis (déjà installés)
-- **Node.js** v24+ et **npm** v11+
-- **Git** v2.53+
-- **Token GitHub** — à renouveler tous les 90 jours :
-  GitHub → avatar → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token (classic)
-  Cocher uniquement **repo**, durée 90 jours.
+Plugin WordPress Gutenberg d'accordéons légers et **librement positionnables** dans la page.
 
 ---
 
-## Première installation sur une nouvelle machine
+## Concept
+
+Contrairement aux plugins d'accordéon classiques, **Free Accordion** ne contraint pas le contenu dans un bloc conteneur. Le bloc parent (groupe) et les blocs fils (items) peuvent être placés **n'importe où** dans la page — séparés par d'autres blocs, dans des colonnes différentes, imbriqués dans d'autres structures.
+
+Les items se rattachent à leur groupe via un identifiant stable, indépendant de leur position dans le DOM.
+
+---
+
+## Les deux blocs
+
+### Accordéon (groupe) — `free-accordion/accordion`
+
+Définit un groupe d'accordéon. Génère optionnellement des boutons de contrôle global.
+
+**Options :**
+- Étiquette du groupe (usage éditeur uniquement)
+- Libellés "Tout voir" / "Tout cacher"
+- Mode exclusif — ouvrir un item ferme les autres
+- Animation CSS de l'ouverture/fermeture
+- Interrupteur général — contrôle tous les accordéons de la page
+
+### Accordéon (item) — `free-accordion/accordion-item`
+
+Un item à placer librement dans la page, contenant deux zones éditables :
+- **Toggler** — ce sur quoi l'utilisateur clique
+- **Contenu révélé** — ce qui apparaît au clic
+
+Les deux zones acceptent n'importe quel bloc Gutenberg, y compris d'autres accordéons.
+
+**Options :**
+- Groupe parent — sélectionne le groupe auquel l'item est rattaché
+- Ouvert par défaut
+
+---
+
+## Installation
+
+### Via l'interface WordPress
+
+Télécharger le zip depuis les [Releases](https://github.com/css117/free-accordion/releases) et uploader via Extensions → Ajouter → Téléverser.
+
+### Via FTP / SSH
+
+Copier le dossier `free-accordion/` (avec `build/`, sans `node_modules/`) dans `wp-content/plugins/`.
+
+---
+
+## Développement
+
+### Prérequis
+
+- Node.js v20+ et npm
+- Git
+
+### Installation
 
 ```bash
 git clone https://github.com/css117/free-accordion.git
@@ -23,94 +69,59 @@ npm install
 npm run build
 ```
 
-Puis déposer le dossier `free-accordion/` dans `wp-content/plugins/` (sans `node_modules/`).
+### Scripts disponibles
 
----
-
-## Workflow quotidien
-
-### 1. Modifier le code
-Éditer les fichiers dans `blocks/free-accordion/` ou `blocks/free-accordion-item/`.
-
-### 2. Compiler
 ```bash
-npm run build
-```
-ou en mode watch pendant le développement (recompile à chaque sauvegarde) :
-```bash
-npm run start
-```
-
-### 3. Tester dans WordPress
-Copier / uploader le dossier mis à jour dans `wp-content/plugins/`.
-
-### 4. Pousser sur GitHub
-```bash
-git add .
-git commit -m "Description courte de ce qui a changé"
-git push
+npm run build   # compile les sources
+npm run start   # compile en mode watch
 ```
 
 ---
 
-## Renouveler le token GitHub (tous les 90 jours)
-
-1. Générer un nouveau token sur GitHub (voir Prérequis)
-2. Dans le dossier du plugin :
-```bash
-git remote set-url origin https://css117:NOUVEAU_TOKEN@github.com/css117/free-accordion.git
-git push
-git remote set-url origin https://github.com/css117/free-accordion.git
-```
-Windows Credential Manager mémorise ensuite le token automatiquement.
-
----
-
-## Structure du plugin
+## Architecture
 
 ```
 free-accordion/
 ├── blocks/
-│   ├── free-accordion/          # Bloc parent (groupe)
-│   │   ├── block.json           # Déclaration du bloc
-│   │   ├── index.js             # Interface éditeur Gutenberg
-│   │   ├── frontend.js          # JS front-end (accordion logic)
-│   │   ├── render.php           # Rendu HTML côté serveur
-│   │   ├── editor.css           # Styles éditeur uniquement
-│   │   └── style.css            # Styles front-end
-│   └── free-accordion-item/     # Bloc fils (item)
+│   ├── free-accordion/           # Bloc parent
+│   │   ├── block.json
+│   │   ├── index.js              # Éditeur Gutenberg (JSX)
+│   │   ├── frontend.js           # JS vanilla front-end
+│   │   ├── render.php            # Rendu serveur
+│   │   ├── editor.css
+│   │   └── style.css
+│   └── free-accordion-item/      # Bloc fils
 │       ├── block.json
 │       ├── index.js
 │       ├── render.php
 │       ├── editor.css
 │       └── style.css
-├── build/                       # Fichiers compilés (généré par npm run build)
-├── free-accordion.php           # Point d'entrée du plugin
-├── package.json                 # Dépendances et scripts npm
-├── webpack.config.js            # Config de build
-├── .gitignore                   # node_modules/, build/, *.zip
-└── .gitattributes               # Normalisation des fins de ligne (LF)
+├── build/                        # Compilé — ne pas modifier
+├── free-accordion.php
+├── package.json
+└── webpack.config.js
 ```
+
+### Choix techniques
+
+- **IDs stables** — `groupId` généré une seule fois à la création du bloc parent
+- **Animation CSS pure** — `@keyframes` avec `max-height` et `animation-fill-mode`, sans calcul JS
+- **`viewStyle`** — CSS de l'item chargé uniquement en front-end
+- **Rendu PHP** — options du groupe résolues côté serveur
+- **JS vanilla** — zéro dépendance, délégation d'événements sur `document`
 
 ---
 
-## Installer le plugin dans WordPress
+## Contribuer
 
-**Via l'interface WP (sans FTP) :**
-1. Zipper le dossier `free-accordion/` en excluant `node_modules/` :
-```bash
-Compress-Archive -Path .\blocks, .\build, .\free-accordion.php, .\package.json, .\webpack.config.js, .\.gitignore, .\.gitattributes -DestinationPath ..\free-accordion-v0.1.0.zip -Force
-```
-2. WordPress → Extensions → Ajouter → Téléverser une extension → choisir le zip.
-
-**Via FTP :**
-Copier le dossier `free-accordion/` (avec `build/`, sans `node_modules/`) dans `wp-content/plugins/`.
+Les issues et pull requests sont les bienvenues sur [GitHub](https://github.com/css117/free-accordion).
 
 ---
 
-## Utilisation dans Gutenberg
+## Auteur
 
-1. Insérer un bloc **Accordéon (groupe)** — lui donner une étiquette, configurer les options (exclusif, animé, boutons tout voir / tout cacher).
-2. Insérer un ou plusieurs blocs **Accordéon (item)** n'importe où dans la page.
-3. Dans chaque item, sélectionner le groupe parent dans le panneau latéral.
-4. Remplir la zone **Toggler** (ce qu'on clique) et la zone **Contenu révélé** avec n'importe quels blocs Gutenberg.
+[Giboo](https://giboo.fr)
+
+## Licence
+
+GPL-2.0-or-later — voir [LICENSE](LICENSE)
