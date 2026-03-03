@@ -45,6 +45,9 @@ $classes = array_filter( [
 		data-fa-exclusive="<?php echo $exclusive ? 'true' : 'false'; ?>"
 		data-fa-animated="<?php echo $animated ? 'true' : 'false'; ?>"
 	<?php endif; ?>
+	<?php if ( ! empty( $attributes['anchor'] ) ) : ?>
+		id="<?php echo esc_attr( $attributes['anchor'] ); ?>"
+	<?php endif; ?>
 >
 	<?php echo $content; ?>
 </div>
