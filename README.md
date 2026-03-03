@@ -2,65 +2,78 @@
 
 ![Version](https://img.shields.io/badge/version-0.1.0-blue) ![Licence](https://img.shields.io/badge/licence-GPL--2.0--or--later-green) ![WordPress](https://img.shields.io/badge/WordPress-6.x-informational)
 
-Plugin WordPress Gutenberg d'accordéons légers et **librement positionnables** dans la page.
+Lightweight Gutenberg accordion blocks that can be **placed freely anywhere on the page**.
 
 ---
 
 ## Concept
 
-Contrairement aux plugins d'accordéon classiques, **Free Accordion** ne contraint pas le contenu dans un bloc conteneur. Le bloc parent (groupe) et les blocs fils (items) peuvent être placés **n'importe où** dans la page — séparés par d'autres blocs, dans des colonnes différentes, imbriqués dans d'autres structures.
+Unlike traditional accordion plugins, **Free Accordion** does not constrain content inside a single container block. The parent block (group) and child blocks (items) can be placed **anywhere on the page** — separated by other blocks, in different columns, nested inside other structures.
 
-Les items se rattachent à leur groupe via un identifiant stable, indépendant de leur position dans le DOM.
+Items link to their group via a stable identifier, independent of their position in the DOM.
 
 ---
 
-## Les deux blocs
+## Blocks
 
-### Accordéon (groupe) — `free-accordion/accordion`
+### Free Accordion group — `free-accordion/accordion`
 
-Définit un groupe d'accordéon. Génère optionnellement des boutons de contrôle global.
+Defines an accordion group. Optionally generates show/hide control buttons.
 
-**Options :**
-- Étiquette du groupe (usage éditeur uniquement)
-- Libellés "Tout voir" / "Tout cacher"
-- Mode exclusif — ouvrir un item ferme les autres
-- Animation CSS de l'ouverture/fermeture
-- Interrupteur général — contrôle tous les accordéons de la page
+**Options:**
+- Group label — for editor use only, not displayed on the site
+- Show all / Hide all button labels
+- Collapse others — opening one item collapses the others
+- Animate opening — CSS drawer effect
+- Global control — buttons control all accordions on the page
 
-### Accordéon (item) — `free-accordion/accordion-item`
+### Free Accordion item — `free-accordion/accordion-item`
 
-Un item à placer librement dans la page, contenant deux zones éditables :
-- **Toggler** — ce sur quoi l'utilisateur clique
-- **Contenu révélé** — ce qui apparaît au clic
+An item to place freely on the page, containing two editable zones:
+- **Toggler** — what the user clicks to open/close
+- **Revealed content** — what appears on click
 
-Les deux zones acceptent n'importe quel bloc Gutenberg, y compris d'autres accordéons.
+Both zones accept any Gutenberg block, including other accordions.
 
-**Options :**
-- Groupe parent — sélectionne le groupe auquel l'item est rattaché
-- Ouvert par défaut
+**Options:**
+- Parent group — select the group this item belongs to
+- Open by default
+
+---
+
+## Usage
+
+1. Insert a **Free Accordion group** block — set a label and configure options
+2. Insert one or more **Free Accordion item** blocks anywhere on the page
+3. In each item, select the parent group in the right sidebar
+4. Fill the **Toggler** and **Revealed content** zones with any Gutenberg blocks
+
+### Nesting
+
+Accordions can be nested — a revealed content zone can contain another accordion group and its items. Parent group selection works at all nesting levels.
 
 ---
 
 ## Installation
 
-### Via l'interface WordPress
+### Via WordPress dashboard
 
-Télécharger le zip depuis les [Releases](https://github.com/css117/free-accordion/releases) et uploader via Extensions → Ajouter → Téléverser.
+Download the zip from [Releases](https://github.com/css117/free-accordion/releases) and upload via Plugins → Add New → Upload Plugin.
 
 ### Via FTP / SSH
 
-Copier le dossier `free-accordion/` (avec `build/`, sans `node_modules/`) dans `wp-content/plugins/`.
+Copy the `free-accordion/` folder (with `build/`, without `node_modules/`) into `wp-content/plugins/`.
 
 ---
 
-## Développement
+## Development
 
-### Prérequis
+### Requirements
 
-- Node.js v20+ et npm
+- Node.js v20+ and npm
 - Git
 
-### Installation
+### Setup
 
 ```bash
 git clone https://github.com/css117/free-accordion.git
@@ -69,11 +82,12 @@ npm install
 npm run build
 ```
 
-### Scripts disponibles
+### Available scripts
 
 ```bash
-npm run build   # compile les sources
-npm run start   # compile en mode watch
+npm run build    # compile sources
+npm run start    # watch mode
+npm run i18n     # generate .pot translation file
 ```
 
 ---
@@ -83,45 +97,46 @@ npm run start   # compile en mode watch
 ```
 free-accordion/
 ├── blocks/
-│   ├── free-accordion/           # Bloc parent
+│   ├── free-accordion/           # Parent block
 │   │   ├── block.json
-│   │   ├── index.js              # Éditeur Gutenberg (JSX)
-│   │   ├── frontend.js           # JS vanilla front-end
-│   │   ├── render.php            # Rendu serveur
+│   │   ├── index.js              # Gutenberg editor (JSX)
+│   │   ├── frontend.js           # Vanilla JS front-end
+│   │   ├── render.php            # Server-side render
 │   │   ├── editor.css
 │   │   └── style.css
-│   └── free-accordion-item/      # Bloc fils
+│   └── free-accordion-item/      # Child block
 │       ├── block.json
 │       ├── index.js
 │       ├── render.php
 │       ├── editor.css
-│       └── style.css
-├── build/                        # Compilé — ne pas modifier
+│       └── style.css             # Loaded on front-end only (viewStyle)
+├── build/                        # Compiled — do not edit
+├── languages/                    # Translation files (.pot, .po, .mo)
 ├── free-accordion.php
 ├── package.json
 └── webpack.config.js
 ```
 
-### Choix techniques
+### Technical choices
 
-- **IDs stables** — `groupId` généré une seule fois à la création du bloc parent
-- **Animation CSS pure** — `@keyframes` avec `max-height` et `animation-fill-mode`, sans calcul JS
-- **`viewStyle`** — CSS de l'item chargé uniquement en front-end
-- **Rendu PHP** — options du groupe résolues côté serveur
-- **JS vanilla** — zéro dépendance, délégation d'événements sur `document`
-
----
-
-## Contribuer
-
-Les issues et pull requests sont les bienvenues sur [GitHub](https://github.com/css117/free-accordion).
+- **Stable IDs** — `groupId` generated once at block creation, never regenerated
+- **Pure CSS animation** — `@keyframes` with `max-height` and `animation-fill-mode`, no JS height calculation
+- **`viewStyle`** — item CSS loaded on front-end only, keeping the editor unaffected
+- **PHP render** — parent group options (`animated`, `exclusive`) resolved server-side
+- **Vanilla JS** — zero dependencies, event delegation on `document`
 
 ---
 
-## Auteur
+## Contributing
 
-[Giboo](https://giboo.fr)
+Issues and pull requests are welcome on [GitHub](https://github.com/css117/free-accordion).
+
+---
+
+## Author
+
+[Giboo.fr](https://giboo.fr)
 
 ## Licence
 
-GPL-2.0-or-later — voir [LICENSE](LICENSE)
+GPL-2.0-or-later — see [LICENSE](LICENSE)
