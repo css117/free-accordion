@@ -31,6 +31,7 @@
 	},
 	"editorScript": "file:../../build/blocks/free-accordion-item/index.js",
 	"editorStyle": "file:./editor.css",
+	"viewScript": "file:../../build/blocks/free-accordion-item/frontend.js",
 	"viewStyle": "file:../../build/blocks/free-accordion-item/style.css",
 	"render": "file:./render.php"
 }

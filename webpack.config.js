@@ -6,7 +6,7 @@ module.exports = {
 	...defaultConfig,
 	entry: {
 		'blocks/free-accordion/index'     : './blocks/free-accordion/index.js',
-		'blocks/free-accordion/frontend'  : './blocks/free-accordion/frontend.js',
+		'blocks/free-accordion-item/frontend' : './blocks/free-accordion-item/frontend.js',
 		'blocks/free-accordion-item/index': './blocks/free-accordion-item/index.js',
 	},
 	output: {

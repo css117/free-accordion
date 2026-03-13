@@ -48,7 +48,6 @@
 		"anchor": true
 	},	
 	"editorScript": "file:../../build/blocks/free-accordion/index.js",
-	"viewScript": "file:../../build/blocks/free-accordion/frontend.js",
 	"editorStyle": "file:./editor.css",
 	"style": "file:../../build/blocks/free-accordion/style.css",	
 	"render": "file:./render.php"
